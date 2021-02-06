@@ -25,6 +25,14 @@ function createWindow() {
     mainWindow.loadURL("http://www.osuskills.com/training");
     mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`);
     mainWindow.setMenuBarVisibility(false);
+
+    const training_url = "http://www.osuskills.com/training";
+    mainWindow.webContents.on("did-navigate", (ev) => {
+        if (!mainWindow.webContents.getURL().includes(training_url))
+            return;
+
+        mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`);
+    });
 }
 
 // This method will be called when Electron has finished
@@ -41,7 +49,7 @@ app.whenReady().then(() => {
 
     globalShortcut.register("CommandOrControl+R", () => {});
     globalShortcut.register("CommandOrControl+Shift+R", () => {});
-    globalShortcut.register("CommandOrControl+Shift+I", () => {});
+    // globalShortcut.register("CommandOrControl+Shift+I", () => {});
     globalShortcut.register("F10", () => {});
     globalShortcut.register("F12", () => {});
 });
