@@ -1,19 +1,16 @@
 const bancho = require("bancho.js");
-const config = require("dotenv").config().parsed;
 
-const client = new bancho.BanchoClient({
-    username: config.username.replace(/\s/g, "_"),
-    password: config.password,
-});
+let client;
 
 module.exports = {
     sendMapQueue,
     sendMaps,
     client,
+    connect,
 };
 
 async function sendMapQueue(queue, to, progressFn = null) {
-    if (!client.isConnected())
+    if (!client || !client.isConnected())
         throw new Error("client not connected");
 
     if (typeof to !== "string" || to.length === 0)
@@ -44,7 +41,7 @@ async function sendMapQueue(queue, to, progressFn = null) {
 }
 
 async function sendMaps(maps, to, progressFn = null) {
-    if (!client.isConnected())
+    if (!client || !client.isConnected())
         throw new Error("client not connected");
 
     if (typeof to !== "string" || to.length === 0)
@@ -73,12 +70,19 @@ async function sendMaps(maps, to, progressFn = null) {
         });
 }
 
-const start_bot = async () => {
+async function connect({ username, password }) {
+    client = new bancho.BanchoClient({
+        username: username.replace(/\s/g, "_"),
+        password: password,
+    });
+
     try {
         await client.connect();
-    } catch (ex) {
-        console.error(ex);
-    }
-};
+        return client;
 
-start_bot();
+    } catch (ex) {
+
+        console.error(ex);
+        return ex;
+    }
+}

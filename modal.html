@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+        />
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+        />
+        <title>Main</title>
+
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="tailwind.css" />
+    </head>
+    <body>
+        <div class="container mx-auto">
+            <div class="w-full mt-8">
+                <div hidden id="sending" class="w-full p-4 my-4 text-white text-center bg-gray-800 rounded-lg">
+                    <span>attempting to connect.. please wait..</span>
+                </div>
+                <input type="text" placeholder="username" name="username" id="username"
+                    class="w-full mb-4 bg-gray-800 flex-initial appearance-none rounded shadow p-3 text-white mr-2 focus:outline-none">
+                <input type="password" placeholder="password" name="password" id="password"
+                    class="w-full my-4 bg-gray-800 flex-initial appearance-none rounded shadow p-3 text-white mr-2 focus:outline-none">
+                <button id="send" class="disabled:opacity-50 w-full mt-4 bg-blue-600 text-white text-base font-semibold rounded-md shadow-md hover:bg-indigo-600 p-3 focus:outline-none">Connect</button>
+
+                <div class="mt-10 text-white">
+                    <a href="https://osu.ppy.sh/p/irc" target="_blank">get these from here</a>
+                </div>
+            </div>
+        </div>
+
+        <script src="./modal.js"></script>
+    </body>
+</html>

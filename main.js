@@ -1,11 +1,22 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain: ipc, globalShortcut } = require("electron");
+const { app, BrowserWindow, ipcMain: ipc, globalShortcut, shell } = require("electron");
 const path = require("path");
 const { bootstrapGetMaps } = require("./lib");
 
+/**
+ * @type {BrowserWindow}
+ */
+let modal;
+
+/**
+ * @type {BrowserWindow}
+ */
+let mainWindow;
+
+
 function createWindow() {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1280,
         height: 720,
         webPreferences: {
@@ -14,6 +25,7 @@ function createWindow() {
         },
         titleBarStyle: "hidden",
         title: "better osu!Skills",
+        show: false,
     });
 
     mainWindow.on("page-title-updated", (ev) => {
@@ -21,7 +33,6 @@ function createWindow() {
     });
 
     // and load the index.html of the app.
-    // mainWindow.loadFile("index.html");
     mainWindow.loadURL("http://www.osuskills.com/training");
     mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`);
     mainWindow.setMenuBarVisibility(false);
@@ -33,6 +44,25 @@ function createWindow() {
 
         mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`);
     });
+
+    modal = new BrowserWindow({
+        width: 720,
+        height: 400,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+            nodeIntegration: true,
+        },
+        titleBarStyle: "hidden",
+        frame: false,
+    });
+    modal.webContents.on("new-window", (ev, url) => {
+        ev.preventDefault();
+
+        shell.openExternal(url);
+    });
+
+    modal.loadFile("modal.html");
+    modal.show();
 }
 
 // This method will be called when Electron has finished
@@ -65,7 +95,7 @@ app.on("window-all-closed", function () {
 // code. You can also put them in separate files and require them here.
 
 const { getMaps } = require("./lib");
-const { sendMapQueue } = require("./bot");
+const { sendMapQueue, connect } = require("./bot");
 
 let sending = false;
 let queue = [];
@@ -94,4 +124,15 @@ ipc.on("send-maps", async (e, message) => {
 
         sending = false;
     }
+});
+
+ipc.on("bot-connect", async (e, message) => {
+    let client = await connect(message);
+    if (client !== null) {
+        e.sender.send("bot-connect-success", message);
+        modal.close();
+        mainWindow.show();
+    }
+    else
+        e.sender.send("bot-connect-error", ex.toString());
 });
