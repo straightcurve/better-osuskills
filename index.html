@@ -1,19 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    <head>
+        <meta charset="UTF-8" />
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+        />
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+        />
+        <title>Main</title>
 
-    <!-- You can also require other files to run in this process -->
-    <script src="./renderer.js"></script>
-  </body>
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="tailwind.css" />
+    </head>
+    <body>
+        <div class="container mx-auto">
+            <div class="w-1/3 mx-auto">
+                <div hidden id="sending" class="w-full p-4 my-4 text-white text-center bg-gray-800 rounded-lg">
+                    <span>sending.. please wait..</span>
+                    <div class="mt-2 bg-gray-300 h-8 w-full rounded-lg">
+                        <div id="progress" class="bg-blue-600 h-8 w-0 m-0 rounded-md"></div>
+                    </div>
+                </div>
+                <div class="w-full my-4 flex items-center">
+                    <input type="text" placeholder="user to send to" name="user" id="user"
+                        class="bg-gray-800 flex-initial appearance-none rounded shadow p-3 text-white mr-2 focus:outline-none">
+                    <button id="send" class="disabled:opacity-50 bg-blue-600 text-white text-base font-semibold rounded-md shadow-md hover:bg-indigo-600 p-3 focus:outline-none">Send</button>
+                </div>
+                <textarea
+                    class="block w-full bg-gray-800 text-gray-300 rounded-lg"
+                    placeholder="Insert osuskills html here"
+                    name="osu-skills-page-content"
+                    id="osu-skills-page-content"
+                    rows="10"
+                ></textarea>
+            </div>
+        </div>
+
+        <script src="./renderer.js"></script>
+    </body>
 </html>
