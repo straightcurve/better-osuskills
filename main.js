@@ -1,30 +1,30 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain: ipc } = require("electron");
+const { app, BrowserWindow, ipcMain: ipc, globalShortcut } = require("electron");
 const path = require("path");
 const { bootstrapGetMaps } = require("./lib");
 
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1280,
+        height: 720,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
-            // webviewTag: true,
         },
+        titleBarStyle: "hidden",
+        title: "better osu!Skills",
+    });
+
+    mainWindow.on("page-title-updated", (ev) => {
+        ev.preventDefault();
     });
 
     // and load the index.html of the app.
     // mainWindow.loadFile("index.html");
     mainWindow.loadURL("http://www.osuskills.com/training");
-    console.log(`(${bootstrapGetMaps.toString()})(document)`);
-    mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`, function (result) {
-        console.log(result);
-    });
-
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+    mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`);
+    mainWindow.setMenuBarVisibility(false);
 }
 
 // This method will be called when Electron has finished
@@ -38,6 +38,12 @@ app.whenReady().then(() => {
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+
+    globalShortcut.register("CommandOrControl+R", () => {});
+    globalShortcut.register("CommandOrControl+Shift+R", () => {});
+    globalShortcut.register("CommandOrControl+Shift+I", () => {});
+    globalShortcut.register("F10", () => {});
+    globalShortcut.register("F12", () => {});
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -51,19 +57,21 @@ app.on("window-all-closed", function () {
 // code. You can also put them in separate files and require them here.
 
 const { getMaps } = require("./lib");
-const { sendMaps } = require("./bot");
+const { sendMapQueue } = require("./bot");
 
 let sending = false;
+let queue = [];
+const max_queue_size = 100;
 
 ipc.on("send-maps", async (e, message) => {
-    if (sending) return;
-
-    sending = true;
-
     try {
         let maps = getMaps(message.content);
-    
-        await sendMaps(maps, message.user, (progress) => {
+        queue.push(...maps.slice(0, Math.min(maps.length, max_queue_size - queue.length)));
+
+        if (sending) return;
+        sending = true;
+
+        await sendMapQueue(queue, message.user, (progress) => {
             e.sender.send("send-maps-progress", progress);
         });
 
