@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain: ipc } = require("electron");
 const path = require("path");
+const { bootstrapGetMaps } = require("./lib");
 
 function createWindow() {
     // Create the browser window.
@@ -10,14 +11,20 @@ function createWindow() {
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true,
+            // webviewTag: true,
         },
     });
 
     // and load the index.html of the app.
-    mainWindow.loadFile("index.html");
+    // mainWindow.loadFile("index.html");
+    mainWindow.loadURL("http://www.osuskills.com/training");
+    console.log(`(${bootstrapGetMaps.toString()})(document)`);
+    mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`, function (result) {
+        console.log(result);
+    });
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
