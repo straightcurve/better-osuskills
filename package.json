@@ -4,7 +4,8 @@
   "description": "osu!Skills but with PM messaging",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder -wl"
   },
   "keywords": [
     "osu",
@@ -13,8 +14,13 @@
   ],
   "author": "straightcurve",
   "license": "MIT",
+  "build": {
+    "appId": "straightcurve.better-osu-skills",
+    "productName": "better osu!Skills"
+  },
   "devDependencies": {
-    "electron": "^11.2.2"
+    "electron": "^11.2.2",
+    "electron-builder": "^22.9.1"
   },
   "dependencies": {
     "bancho.js": "^0.9.7",
