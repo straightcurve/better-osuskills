@@ -1,6 +1,6 @@
 {
   "name": "better-osu-skills",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "osu!Skills but with PM messaging in-game",
   "main": "src/main.js",
   "scripts": {
