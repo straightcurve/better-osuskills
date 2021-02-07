@@ -36,7 +36,7 @@ send.onclick = () => {
 
 ipc.on("bot-connect-error", (ev, error) => {
     if (error.includes("Bancho Auth failed"))
-        error_content.innerHTML = "Please double-check your credentials or get them from the link below.";
+        error_content.innerHTML = "Please double-check your credentials. Make sure you are using the IRC credentials and not your accounts'.\nYou can get them from the link below.";
     else
         error_content.innerHTML = `Unknown error.. ${error}`;
 
