@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+        />
+        <meta
+            http-equiv="X-Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'"
+        />
+
+        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="../tailwind.css" />
+    </head>
+    <body>
+        <div class="container mx-auto">
+            <div class="w-full mt-8">
+                <div id="status" class="w-full p-4 my-4 text-white text-center rounded-lg">
+                    <span id="status-text">Checking for updates..</span>
+                    <div class="mt-2 bg-gray-300 h-8 w-full rounded-lg">
+                        <div id="progress" class="bg-blue-600 h-8 w-0 m-0 rounded-md"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="./modal.js"></script>
+    </body>
+</html>

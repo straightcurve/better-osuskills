@@ -1,7 +1,7 @@
 {
   "name": "better-osu-skills",
-  "version": "1.0.2",
-  "description": "osu!Skills but with PM messaging",
+  "version": "1.0.3",
+  "description": "osu!Skills but with PM messaging in-game",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -18,7 +18,11 @@
   "license": "MIT",
   "build": {
     "appId": "straightcurve.better-osu-skills",
-    "productName": "better osu!Skills"
+    "publish": {
+        "provider": "github",
+        "owner": "straightcurve",
+        "host": "github.com"
+    }
   },
   "devDependencies": {
     "electron": "^11.2.2",
@@ -28,6 +32,7 @@
     "bancho.js": "^0.9.7",
     "cheerio": "^1.0.0-rc.5",
     "dotenv": "^8.2.0",
+    "electron-updater": "^4.3.5",
     "jquery": "^3.5.1"
   }
 }

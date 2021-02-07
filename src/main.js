@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain: ipc, globalShortcut, shell } = require("electron");
+const { app, BrowserWindow, ipcMain: ipc, globalShortcut, shell, ipcMain } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const path = require("path");
 const { bootstrapGetMaps } = require("./lib");
 
@@ -68,12 +69,46 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
-    createWindow();
-
-    app.on("activate", function () {
+    if (!process.env.APPIMAGE) {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
+
+        return;
+    }
+
+    const cfu_modal = new BrowserWindow({
+        width: 720,
+        height: 400,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+            nodeIntegration: true,
+        },
+        titleBarStyle: "hidden",
+        frame: false,
+    });
+
+    cfu_modal.loadFile(path.join(__dirname, "pages", "update", "modal.html"));
+    cfu_modal.show();
+
+    autoUpdater.autoDownload = true;
+    autoUpdater.autoInstallOnAppQuit = true;
+    autoUpdater.checkForUpdatesAndNotify({title: "hai", body: "update avaialble"});
+
+    autoUpdater.on("update-not-available", () => {
+        createWindow();
+
+        cfu_modal.close();
+        cfu_modal.destroy();
+        cfu_modal = null;
+    });
+
+    autoUpdater.on("update-available", () => {
+        cfu_modal.webContents.send("update-available");
+    });
+
+    autoUpdater.on("update-downloaded", () => {
+        autoUpdater.quitAndInstall();
     });
 
     globalShortcut.register("CommandOrControl+R", () => {});
