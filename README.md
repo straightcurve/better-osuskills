@@ -13,7 +13,13 @@ npm i
 npm run start
 ```
 
-# package for windows and linux (64-bit)
+# create packages for windows and linux (64-bit)
 ```bash
-npm run build
+npm run dist
+```
+
+# tailwind-css
+```bash
+npm run build-css       # get development build
+npm run build-css-prod  # get production build
 ```

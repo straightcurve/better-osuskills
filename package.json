@@ -5,7 +5,9 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder -wl"
+    "build-css": "npx tailwindcss-cli@latest build src/pages/style.css src/pages/tailwind.css -o src/pages/tailwind.css",
+    "build-css-prod": "NODE_ENV=production npx tailwindcss-cli@latest build src/pages/style.css src/pages/tailwind.css -o src/pages/tailwind.css",
+    "dist": "npm run build-css-prod && electron-builder -wl"
   },
   "keywords": [
     "osu",
