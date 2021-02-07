@@ -2,7 +2,7 @@
   "name": "better-osu-skills",
   "version": "1.0.1",
   "description": "osu!Skills but with PM messaging",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder -wl"

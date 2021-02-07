@@ -20,7 +20,7 @@ function createWindow() {
         width: 1280,
         height: 720,
         webPreferences: {
-            preload: path.join(__dirname, "preload.js"),
+            preload: path.join(__dirname, "src", "preload.js"),
             nodeIntegration: true,
         },
         titleBarStyle: "hidden",
@@ -32,12 +32,11 @@ function createWindow() {
         ev.preventDefault();
     });
 
-    // and load the index.html of the app.
-    mainWindow.loadURL("http://www.osuskills.com/training");
+    const training_url = "http://www.osuskills.com/training";
+    mainWindow.loadURL(training_url);
     mainWindow.webContents.executeJavaScript(`(${bootstrapGetMaps.toString()})(document)`);
     mainWindow.setMenuBarVisibility(false);
 
-    const training_url = "http://www.osuskills.com/training";
     mainWindow.webContents.on("did-navigate", (ev) => {
         if (!mainWindow.webContents.getURL().includes(training_url))
             return;
@@ -61,7 +60,7 @@ function createWindow() {
         shell.openExternal(url);
     });
 
-    modal.loadFile("modal.html");
+    modal.loadFile(path.join(__dirname, "pages", "initial", "modal.html"));
     modal.show();
 }
 
