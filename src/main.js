@@ -77,7 +77,7 @@ app.whenReady().then(() => {
         return;
     }
 
-    const cfu_modal = new BrowserWindow({
+    let cfu_modal = new BrowserWindow({
         width: 720,
         height: 400,
         webPreferences: {
@@ -138,6 +138,10 @@ const max_queue_size = 100;
 ipc.on("send-maps", async (e, message) => {
     try {
         let maps = getMaps(message.content);
+        e.sender.send("log-maps", {
+            maps,
+        });
+        
         queue.push(...maps.slice(0, Math.min(maps.length, max_queue_size - queue.length)));
 
         if (sending) return;

@@ -85,6 +85,10 @@ function bootstrapGetMaps(doc) {
 
     });
 
+    ipc.on("log-maps", (e, message) => {
+        console.log("Queued up", message.maps);
+    });
+
     doc.getElementById("username").value = localStorage.getItem("username") || "";
     doc.getElementById("username").onchange = () => {
         localStorage.setItem("username", doc.getElementById("username").value);

@@ -19,14 +19,16 @@ async function sendMapQueue(queue, to, progressFn = null) {
     if (typeof progressFn !== "function")
         progressFn = function() {};
 
+    let index = 0;
+
     while (queue.length)
         await new Promise((resolve) => {
             let map = queue.shift();
 
             setTimeout(async () => {
-                // console.log(map.toString());
+                // console.log(`${index++}| ${map}`);
 
-                await client.getUser(to.replace(/\s/g, "_")).sendMessage(map.toString());
+                await client.getUser(to.replace(/\s/g, "_")).sendMessage(`${++index}| ${map}`);
                 
                 try {
                     progressFn(-(0 - queue.length) / queue.length);
