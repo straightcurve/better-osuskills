@@ -23,6 +23,7 @@ send.onclick = () => {
 
     send.toggleAttribute("disabled");
     sending.toggleAttribute("hidden");
+    error_content.toggleAttribute("hidden", true);
 
     localStorage.setItem("bot.username", _username);
     localStorage.setItem("bot.password", _password);
@@ -34,8 +35,14 @@ send.onclick = () => {
 };
 
 ipc.on("bot-connect-error", (ev, error) => {
-    if (error)
-        return error_content.innerHTML = "Failed to connect.. 🤡";
+    if (error.includes("Bancho Auth failed"))
+        error_content.innerHTML = "Please double-check your credentials or get them from the link below.";
+    else
+        error_content.innerHTML = `Unknown error.. ${error}`;
+
+    error_content.toggleAttribute("hidden", false);
+    sending.toggleAttribute("hidden");
+    send.toggleAttribute("disabled");
 });
 
 send.click();

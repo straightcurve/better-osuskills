@@ -78,7 +78,7 @@ async function connect({ username, password }) {
 
     try {
         await client.connect();
-        return client;
+        return null;
 
     } catch (ex) {
 

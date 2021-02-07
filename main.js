@@ -127,12 +127,12 @@ ipc.on("send-maps", async (e, message) => {
 });
 
 ipc.on("bot-connect", async (e, message) => {
-    let client = await connect(message);
-    if (client !== null) {
+    let error = await connect(message);
+    if (error === null) {
         e.sender.send("bot-connect-success", message);
         modal.close();
         mainWindow.show();
     }
     else
-        e.sender.send("bot-connect-error", ex.toString());
+        e.sender.send("bot-connect-error", error.toString());
 });
