@@ -22,7 +22,7 @@ cache:
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      apt install --install-recommends winehq-stable
+      sudo apt install --install-recommends winehq-stable
       npm install && npm run dist
 
       # docker run --rm electronuserland/builder:wine -v ${PWD}:/project /bin/bash -c "nvm i 15 && nvm use 15 && npm run dist"
