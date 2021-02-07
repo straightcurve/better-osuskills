@@ -3,7 +3,7 @@ matrix:
     - os: osx
       osx_image: xcode10.2
       language: node_js
-      node_js: "10"
+      node_js: "15"
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
@@ -22,16 +22,9 @@ cache:
 script:
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      sudo apt install --install-recommends winehq-stable
-      npm install && npm run dist
-
-      # docker run --rm electronuserland/builder:wine -v ${PWD}:/project /bin/bash -c "nvm i 15 && nvm use 15 && npm run dist"
-        # --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
-        #-v ~/.cache/electron:/root/.cache/electron \
-        #-v ~/.cache/electron-builder:/root/.cache/electron-builder \
-        #electronuserland/builder:wine \
+      npm i && npm run dist
     else
-      npm run dist
+      npm i && npm run dist
     fi
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
