@@ -130,16 +130,42 @@ app.on("window-all-closed", function () {
 
 const { getMaps } = require("./lib");
 const { sendMapQueue, connect } = require("./bot");
+const { MD5 } = require("crypto-js");
+const md5 = (stuff) => {
+    let hash = MD5(stuff);
+    let words = hash.words;
+    if(words) {
+        let base = hash.sigBytes;
+        let w = hash.words.length;
+        let result = "";
+        while(w--)
+            result += (words[w] >>> 0).toString(base);  //  to unsigned
+
+        return result;
+    }
+    else
+        return hash;
+};
 
 let sending = false;
 let queue = [];
+let hash;
 const max_queue_size = 100;
 
 ipc.on("send-maps", async (e, message) => {
     try {
-        let maps = getMaps(message.content);
+        let maps = getMaps(message.content, message.categories);
+        if (maps.length === 0)
+            return;
+
+        let _hash = md5(JSON.stringify(maps.map(m => (m.link)).join("")));
+        if (_hash === hash)
+            return;
+
+        hash = _hash;
+
         e.sender.send("log-maps", {
-            maps,
+            serialized_maps: JSON.stringify(maps),
         });
         
         queue.push(...maps.slice(0, Math.min(maps.length, max_queue_size - queue.length)));
