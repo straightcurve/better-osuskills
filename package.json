@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "electron": "^11.2.3",
-    "electron-builder": "^22.9.1"
+    "electron-builder": "^22.10.5"
   },
   "dependencies": {
     "bancho.js": "^0.9.7",
