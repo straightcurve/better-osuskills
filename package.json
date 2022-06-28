@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "bancho.js": "^0.9.7",
-    "cheerio": "^1.0.0-rc.5",
+    "cheerio": "^1.0.0-rc.12",
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
     "jquery": "^3.6.0",
