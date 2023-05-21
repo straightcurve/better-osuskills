@@ -1,3 +1,6 @@
+# DISCLAIMER
+this is broken now that they moved to https :(. i am still looking for solutions.
+
 # better-osuskills
 gets results from the osu!Skills training page and PMs them on osu! using your own IRC credentials
 
